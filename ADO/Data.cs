@@ -14,12 +14,22 @@ namespace ADO
         {
             string cs = "Data Source=(localdb)\\MSSQLLocalDB;Initial catalog=ado_db;Integrated Security=true;";
             SqlConnection conn = new SqlConnection(cs);
-            conn.Open();
-            if (conn.State == ConnectionState.Open)
+            try
             {
-                Console.WriteLine("Connection has benn Created Sucessful");
+                conn.Open();
+                if (conn.State == ConnectionState.Open)
+                {
+                    Console.WriteLine("Connection has benn Created Sucessful");
+                }
             }
-            conn.Close(); 
+            catch (SqlException ex) 
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                conn.Close(); 
+            }
         }
     }
 }
