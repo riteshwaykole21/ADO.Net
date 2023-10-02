@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Configuration;
 
 namespace ADO
 {
@@ -12,14 +13,26 @@ namespace ADO
     {
         public void Connection()
         {
-            string cs = "Data Source=(localdb)\\MSSQLLocalDB;Initial catalog=ado_db;Integrated Security=true;";
-            using (SqlConnection conn = new SqlConnection(cs))
+            string cs = ConfigurationManager.ConnectionStrings["dbcs"].ConnectionString;
+            SqlConnection conn = null;
+            try
             {
-                conn.Open();
-                if (conn.State == ConnectionState.Open)
+                using (conn = new SqlConnection(cs))
                 {
-                    Console.WriteLine("Connection has benn Created Sucessful");
+                    conn.Open();
+                    if (conn.State == ConnectionState.Open)
+                    {
+                        Console.WriteLine("Connection has benn Created Sucessful");
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+              conn.Close();
             }
         }
     }
